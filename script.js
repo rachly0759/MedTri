@@ -1,12 +1,35 @@
 // Application state
 let currentView = 'queue'; // 'queue' or 'assessment'
-let patients = [
-    { id: 'P001', esi: 2, status: 'In Triage', waitTime: 15, arrivalTime: '14:30', chief_complaint: 'Chest pain' },
-    { id: 'P002', esi: 3, status: 'Waiting', waitTime: 45, arrivalTime: '14:45', chief_complaint: 'Abdominal pain' },
-    { id: 'P003', esi: 1, status: 'Being Seen', waitTime: 0, arrivalTime: '15:00', chief_complaint: 'Cardiac arrest' },
-    { id: 'P004', esi: 4, status: 'Waiting', waitTime: 120, arrivalTime: '14:20', chief_complaint: 'Minor laceration' },
-    { id: 'P005', esi: 3, status: 'Waiting', waitTime: 90, arrivalTime: '14:35', chief_complaint: 'Fever' }
-];
+let patients = [];
+let lastId = 0;
+
+// Load patients from server
+async function loadPatients() {
+    try {
+        const response = await fetch('/api/patients');
+        if (response.ok) {
+            const data = await response.json();
+            patients = data.patients || [];
+            lastId = data.lastId || 0;
+            updateQueueStats();
+            renderPatientQueue();
+        } else {
+            console.error('Failed to load patients:', await response.text());
+            // Fallback to empty array if server is not available
+            patients = [];
+            lastId = 0;
+            updateQueueStats();
+            renderPatientQueue();
+        }
+    } catch (error) {
+        console.error('Error loading patients:', error);
+        // Fallback to empty array if server is not available
+        patients = [];
+        lastId = 0;
+        updateQueueStats();
+        renderPatientQueue();
+    }
+}
 
 let assessmentData = {
     vitalsStable: null,
@@ -341,9 +364,8 @@ function showResultsScreen() {
     }
 }
 
-function addPatientToQueue() {
+async function addPatientToQueue() {
     const newPatient = {
-        id: `P${String(patients.length + 1).padStart(3, '0')}`,
         esi: patientESI,
         status: 'Waiting',
         waitTime: Math.round(Math.random() * 60 + 30),
@@ -351,11 +373,29 @@ function addPatientToQueue() {
         chief_complaint: 'Self-assessed symptoms'
     };
     
-    patients.push(newPatient);
-    patients.sort((a, b) => a.esi - b.esi);
-    
-    // Reset form and return to queue
-    showQueueView();
+    try {
+        const response = await fetch('/api/patients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newPatient)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            // Reload patients from server
+            await loadPatients();
+            // Reset form and return to queue
+            showQueueView();
+        } else {
+            console.error('Failed to add patient:', await response.text());
+            alert('Failed to add patient to queue. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error adding patient:', error);
+        alert('Failed to add patient to queue. Please check your connection and try again.');
+    }
 }
 
 function startAssessment() {
@@ -364,9 +404,8 @@ function startAssessment() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Initial render
-    updateQueueStats();
-    renderPatientQueue();
+    // Load initial data from server
+    loadPatients();
     
     // Button event listeners
     document.getElementById('startAssessmentBtn').addEventListener('click', startAssessment);
