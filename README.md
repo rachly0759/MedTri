@@ -25,10 +25,23 @@ If you want to use the server version with JSON file storage:
    ```
 3. **Start the Server**:
    ```bash
-   npm start
+   export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && npm start
    ```
 4. **Access the Application**:
    Open your browser and navigate to `http://localhost:3000`
+
+**Alternative Single Command:**
+```bash
+export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && npm start
+```
+
+**To Stop the Server:**
+Press `Ctrl + C` in the terminal where the server is running
+
+**To Check if Server is Running:**
+```bash
+curl http://localhost:3000/api/patients
+```
 
 ## File Structure
 
