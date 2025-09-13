@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedTri - Doctor View</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 24px;
+        }
+
+        .modal-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .modal-subtitle {
+            color: #bfdbfe;
+            margin: 4px 0 0 0;
+            font-size: 14px;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-content {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .modal-section-full {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .modal-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 16px 0;
+        }
+
+        .modal-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .modal-input, .modal-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+        .modal-input:focus, .modal-select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .modal-input[readonly] {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .assessment-responses {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .assessment-response-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 16px;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 640px) {
+            .assessment-response-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        .assessment-question {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .assessment-answer {
+            color: #6b7280;
+        }
+
+        .edit-response-btn {
+            color: #2563eb;
+            background: none;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .edit-response-btn:hover {
+            background: #eff6ff;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .modal-btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .modal-btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* Animation */
+        .modal-overlay {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-container {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Patient Queue Styles */
+        .patient-row {
+            background: white;
+            border-left: 4px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .patient-row:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .patient-content {
+            display: grid;
+            grid-template-columns: 60px 200px 1fr 120px 120px 40px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (max-width: 1200px) {
+            .patient-content {
+                grid-template-columns: 50px 150px 1fr 100px 100px 30px;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .patient-content {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                text-align: left;
+            }
+            
+            .patient-row {
+                padding: 16px;
+            }
+        }
+
+        .patient-esi {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .esi-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .patient-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .patient-id {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .patient-esi-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .patient-complaint,
+        .patient-arrival,
+        .patient-wait {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .field-value {
+            font-size: 15px;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .patient-status {
+            display: flex;
+            justify-content: center;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .patient-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .patient-row:hover .patient-arrow {
+            opacity: 1;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .patient-esi,
+            .patient-status,
+            .patient-arrow {
+                justify-content: flex-start;
+            }
+            
+            .esi-badge {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .patient-id {
+                font-size: 16px;
+            }
+            
+            .field-value {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Queue View -->
+    <div id="queueView" class="min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-blue-600 text-white p-4 shadow-lg">
+            <div class="max-w-6xl mx-auto flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold flex items-center gap-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        MedTri - Doctor View
+                    </h1>
+                    <p class="text-blue-100 mt-1">Real-time emergency department queue with intelligent triage</p>
+                </div>
+                
+                <!-- View Selector Dropdown -->
+                <div class="relative">
+                    <button id="viewDropdownBtn" class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Doctor View
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="viewDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50" style="display: none;">
+                        <div class="py-2">
+                            <a href="index.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                Public View
+                            </a>
+                            <a href="doctor.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Doctor View
+                                <svg class="w-4 h-4 ml-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="bg-white border-b shadow-sm">
+            <div class="max-w-6xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-gray-800">Current Queue Status</h2>
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Doctor Dashboard
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto p-4">
+            <!-- Queue Stats -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Total Patients</p>
+                            <p id="totalPatients" class="text-2xl font-bold">6</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <div class="ml-4">
+                            <p class="text-sm text-gray-500">Critical Cases</p>
+                            <p id="criticalCases" class="text-2xl font-bold">2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Queue List -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h3 class="text-lg font-semibold">Patient Queue</h3>
+                    <p class="text-gray-600">Click on any patient to view and edit their details</p>
+                </div>
+                <div id="patientQueue" class="divide-y">
+                    <!-- Patient items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Details Modal -->
+    <div id="patientModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <div>
+                        <h2 id="modalPatientId" class="modal-title">Patient Details</h2>
+                        <p class="modal-subtitle">View and edit patient information</p>
+                    </div>
+                    <button id="closeModal" class="modal-close-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Close
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <!-- Patient Basic Info -->
+                <div class="modal-grid">
+                    <div class="modal-section">
+                        <h3 class="modal-section-title">Basic Information</h3>
+                        <div class="modal-form-group">
+                            <div class="modal-field">
+                                <label class="modal-label">Patient ID</label>
+                                <input type="text" id="editPatientId" class="modal-input" readonly>
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">ESI Level</label>
+                                <select id="editESI" class="modal-select">
+                                    <option value="1">1 - Immediate</option>
+                                    <option value="2">2 - Emergency</option>
+                                    <option value="3">3 - Urgent</option>
+                                    <option value="4">4 - Semi-urgent</option>
+                                    <option value="5">5 - Non-urgent</option>
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Status</label>
+                                <select id="editStatus" class="modal-select">
+                                    <option value="Waiting">Waiting</option>
+                                    <option value="In Triage">In Triage</option>
+                                    <option value="Being Seen">Being Seen</option>
+                                    <option value="Discharged">Discharged</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3 class="modal-section-title">Timing Information</h3>
+                        <div class="modal-form-group">
+                            <div class="modal-field">
+                                <label class="modal-label">Arrival Time</label>
+                                <input type="text" id="editArrivalTime" class="modal-input">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Chief Complaint</label>
+                                <input type="text" id="editChiefComplaint" class="modal-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment Responses -->
+                <div class="modal-section-full">
+                    <h3 class="modal-section-title">Assessment Responses</h3>
+                    <div id="assessmentResponses" class="assessment-responses">
+                        <!-- Assessment responses will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="modal-actions">
+                    <button id="cancelEdit" class="modal-btn modal-btn-secondary">
+                        Cancel
+                    </button>
+                    <button id="savePatient" class="modal-btn modal-btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let patients = [];
+        let lastId = 0;
+        let currentPatient = null;
+
+        // Load patients from server
+        async function loadPatients() {
+            try {
+                const response = await fetch('/api/patients');
+                if (response.ok) {
+                    const data = await response.json();
+                    patients = data.patients || [];
+                    lastId = data.lastId || 0;
+                    updateQueueStats();
+                    renderPatientQueue();
+                } else {
+                    console.error('Failed to load patients:', await response.text());
+                    patients = [];
+                    lastId = 0;
+                    updateQueueStats();
+                    renderPatientQueue();
+                }
+            } catch (error) {
+                console.error('Error loading patients:', error);
+                patients = [];
+                lastId = 0;
+                updateQueueStats();
+                renderPatientQueue();
+            }
+        }
+
+        // Update queue statistics
+        function updateQueueStats() {
+            const totalPatients = patients.length;
+            const criticalCases = patients.filter(p => p.esi === 1 || p.esi === 2).length;
+
+            document.getElementById('totalPatients').textContent = totalPatients;
+            document.getElementById('criticalCases').textContent = criticalCases;
+        }
+
+        // Render patient queue with clickable items
+        function renderPatientQueue() {
+            const queueContainer = document.getElementById('patientQueue');
+            queueContainer.innerHTML = '';
+
+            if (patients.length === 0) {
+                queueContainer.innerHTML = `
+                    <div class="p-8 text-center text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        <p class="text-lg">No patients in queue</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort patients by ESI (1 = highest priority)
+            const sortedPatients = [...patients].sort((a, b) => a.esi - b.esi);
+
+            sortedPatients.forEach(patient => {
+                const esiColor = getESIColor(patient.esi);
+                const statusColor = getStatusColor(patient.status);
+                
+                const patientItem = document.createElement('div');
+                patientItem.className = 'patient-row';
+                patientItem.style.borderLeftColor = esiColor.borderColor;
+                patientItem.onclick = () => openPatientModal(patient);
+                
+                patientItem.innerHTML = `
+                    <div class="patient-content">
+                        <div class="patient-esi">
+                            <div class="esi-badge" style="background-color: ${esiColor.backgroundColor}">
+                                ${patient.esi}
+                            </div>
+                        </div>
+                        <div class="patient-info">
+                            <div class="patient-id">${patient.id}</div>
+                            <div class="patient-esi-text">ESI Level ${patient.esi} - ${patient.esi === 1 ? 'Immediate' : patient.esi === 2 ? 'Emergency' : patient.esi === 3 ? 'Urgent' : patient.esi === 4 ? 'Semi-urgent' : 'Non-urgent'}</div>
+                        </div>
+                        <div class="patient-complaint">
+                            <div class="field-label">Chief Complaint</div>
+                            <div class="field-value">${patient.chief_complaint || 'Not specified'}</div>
+                        </div>
+                        <div class="patient-arrival">
+                            <div class="field-label">Arrival Time</div>
+                            <div class="field-value">${patient.arrivalTime}</div>
+                        </div>
+                        <div class="patient-status">
+                            <span class="status-badge" style="background-color: ${statusColor.backgroundColor}; color: ${statusColor.textColor}">
+                                ${patient.status}
+                            </span>
+                        </div>
+                        <div class="patient-arrow">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+                
+                queueContainer.appendChild(patientItem);
+            });
+        }
+
+        // Get ESI color scheme
+        function getESIColor(esi) {
+            switch(esi) {
+                case 1: return { backgroundColor: '#dc2626', borderColor: '#dc2626' };
+                case 2: return { backgroundColor: '#ea580c', borderColor: '#ea580c' };
+                case 3: return { backgroundColor: '#d97706', borderColor: '#d97706' };
+                case 4: return { backgroundColor: '#2563eb', borderColor: '#2563eb' };
+                case 5: return { backgroundColor: '#16a34a', borderColor: '#16a34a' };
+                default: return { backgroundColor: '#6b7280', borderColor: '#6b7280' };
+            }
+        }
+
+        // Get status color scheme
+        function getStatusColor(status) {
+            switch(status) {
+                case 'Waiting': return { backgroundColor: '#fef3c7', textColor: '#92400e' };
+                case 'In Triage': return { backgroundColor: '#dbeafe', textColor: '#1e40af' };
+                case 'Being Seen': return { backgroundColor: '#dcfce7', textColor: '#166534' };
+                case 'Discharged': return { backgroundColor: '#f3f4f6', textColor: '#374151' };
+                default: return { backgroundColor: '#f3f4f6', textColor: '#374151' };
+            }
+        }
+
+        // Open patient modal
+        function openPatientModal(patient) {
+            currentPatient = patient;
+            document.getElementById('modalPatientId').textContent = `Patient ${patient.id} - Details`;
+            
+            // Fill basic information
+            document.getElementById('editPatientId').value = patient.id;
+            document.getElementById('editESI').value = patient.esi;
+            document.getElementById('editStatus').value = patient.status;
+            document.getElementById('editArrivalTime').value = patient.arrivalTime;
+            document.getElementById('editChiefComplaint').value = patient.chief_complaint || '';
+            
+            // Fill assessment responses
+            renderAssessmentResponses(patient);
+            
+            // Show modal
+            document.getElementById('patientModal').style.display = 'flex';
+        }
+
+        // Render assessment responses
+        function renderAssessmentResponses(patient) {
+            const responsesContainer = document.getElementById('assessmentResponses');
+            
+            // Default assessment questions (you can expand this based on your actual assessment data)
+            const assessmentQuestions = [
+                { key: 'vitalsStable', question: 'Are vital signs stable?', type: 'yesno' },
+                { key: 'painLevel', question: 'Pain level (1-10)?', type: 'number' },
+                { key: 'chestPain', question: 'Chest pain present?', type: 'yesno' },
+                { key: 'breathingDifficulty', question: 'Breathing difficulty?', type: 'yesno' },
+                { key: 'consciousness', question: 'Level of consciousness?', type: 'text' },
+                { key: 'bleeding', question: 'Active bleeding?', type: 'yesno' },
+                { key: 'onset', question: 'Symptom onset?', type: 'text' },
+                { key: 'age', question: 'Patient age?', type: 'number' }
+            ];
+
+            responsesContainer.innerHTML = '';
+
+            assessmentQuestions.forEach(q => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'assessment-response-item';
+                
+                const currentValue = patient[q.key] || 'Not assessed';
+                const displayValue = currentValue === null || currentValue === undefined ? 'Not assessed' : currentValue;
+                
+                responseDiv.innerHTML = `
+                    <div class="assessment-question">${q.question}</div>
+                    <div class="assessment-answer">${displayValue}</div>
+                    <div>
+                        <button data-edit-key="${q.key}" data-edit-type="${q.type}" class="edit-response-btn">
+                            Edit
+                        </button>
+                    </div>
+                `;
+                
+                responsesContainer.appendChild(responseDiv);
+            });
+        }
+
+        // Edit assessment response (simplified version)
+        function editAssessmentResponse(key, type) {
+            const currentValue = currentPatient[key];
+            let newValue = prompt(`Enter new value for ${key}:`, currentValue || '');
+            
+            if (newValue !== null) {
+                if (type === 'number') {
+                    newValue = parseInt(newValue);
+                    if (isNaN(newValue)) {
+                        alert('Please enter a valid number');
+                        return;
+                    }
+                }
+                currentPatient[key] = newValue;
+                renderAssessmentResponses(currentPatient);
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('patientModal').style.display = 'none';
+            currentPatient = null;
+        }
+
+        // Save patient changes
+        async function savePatient() {
+            if (!currentPatient) return;
+
+            try {
+                const response = await fetch('/api/patients', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(currentPatient)
+                });
+
+                if (response.ok) {
+                    // Update local patients array
+                    const index = patients.findIndex(p => p.id === currentPatient.id);
+                    if (index !== -1) {
+                        patients[index] = currentPatient;
+                        updateQueueStats();
+                        renderPatientQueue();
+                    }
+                    closeModal();
+                    alert('Patient information updated successfully!');
+                } else {
+                    alert('Failed to update patient information');
+                }
+            } catch (error) {
+                console.error('Error updating patient:', error);
+                alert('Error updating patient information');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPatients();
+            
+            // Modal event listeners
+            document.getElementById('closeModal').onclick = closeModal;
+            document.getElementById('cancelEdit').onclick = closeModal;
+            document.getElementById('savePatient').onclick = savePatient;
+            
+            // Close modal when clicking outside
+            document.getElementById('patientModal').onclick = function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            };
+        });
+
+        // Event delegation for edit buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-response-btn')) {
+                const key = e.target.getAttribute('data-edit-key');
+                const type = e.target.getAttribute('data-edit-type');
+                editAssessmentResponse(key, type);
+            }
+        });
+        
+        // Dropdown functionality
+        const dropdownBtn = document.getElementById('viewDropdownBtn');
+        const dropdown = document.getElementById('viewDropdown');
+        
+        dropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            dropdown.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

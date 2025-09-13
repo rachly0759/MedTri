@@ -4,7 +4,6 @@
       "id": "P001",
       "esi": 2,
       "status": "In Triage",
-      "waitTime": 15,
       "arrivalTime": "14:30",
       "chief_complaint": "Chest pain"
     },
@@ -12,7 +11,6 @@
       "id": "P002",
       "esi": 3,
       "status": "Waiting",
-      "waitTime": 45,
       "arrivalTime": "14:45",
       "chief_complaint": "Abdominal pain"
     },
@@ -20,7 +18,6 @@
       "id": "P003",
       "esi": 1,
       "status": "Being Seen",
-      "waitTime": 0,
       "arrivalTime": "15:00",
       "chief_complaint": "Cardiac arrest"
     },
@@ -28,7 +25,6 @@
       "id": "P004",
       "esi": 4,
       "status": "Waiting",
-      "waitTime": 120,
       "arrivalTime": "14:20",
       "chief_complaint": "Minor laceration"
     },
@@ -36,10 +32,16 @@
       "id": "P005",
       "esi": 3,
       "status": "Waiting",
-      "waitTime": 90,
       "arrivalTime": "14:35",
       "chief_complaint": "Fever"
+    },
+    {
+      "id": "P006",
+      "esi": 5,
+      "status": "Waiting",
+      "arrivalTime": "04:55 PM",
+      "chief_complaint": "Self-assessed symptoms"
     }
   ],
-  "lastId": 8
+  "lastId": 6
 }

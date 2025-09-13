@@ -187,8 +187,6 @@ function showAssessmentView() {
 // Queue management
 function updateQueueStats() {
     document.getElementById('totalPatients').textContent = patients.length;
-    const avgWaitTime = Math.round(patients.reduce((acc, p) => acc + p.waitTime, 0) / patients.length);
-    document.getElementById('avgWaitTime').textContent = `${avgWaitTime}m`;
     document.getElementById('criticalCases').textContent = patients.filter(p => p.esi <= 2).length;
 }
 
@@ -220,11 +218,6 @@ function renderPatientQueue() {
                         ${getStatusIcon(patient.status)}
                         <span class="font-medium text-gray-700">${patient.status}</span>
                     </div>
-                    ${patient.waitTime > 0 ? `
-                        <div class="text-sm text-gray-500">
-                            Est. wait: ${patient.waitTime}m
-                        </div>
-                    ` : ''}
                 </div>
             </div>
         </div>
@@ -265,10 +258,10 @@ function renderCurrentQuestion() {
     if (question.type === 'yes_no') {
         answerContainer.innerHTML = `
             <div class="space-y-4">
-                <button onclick="handleAnswerSelect('yes')" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-green-500 hover:bg-green-50 transition-all text-xl font-semibold text-gray-700 hover:text-green-700">
+                <button data-answer="yes" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-green-500 hover:bg-green-50 transition-all text-xl font-semibold text-gray-700 hover:text-green-700 answer-btn">
                     <span class="text-green-600 mr-3">✓</span> Yes
                 </button>
-                <button onclick="handleAnswerSelect('no')" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all text-xl font-semibold text-gray-700 hover:text-red-700">
+                <button data-answer="no" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all text-xl font-semibold text-gray-700 hover:text-red-700 answer-btn">
                     <span class="text-red-600 mr-3">✗</span> No
                 </button>
             </div>
@@ -282,7 +275,7 @@ function renderCurrentQuestion() {
                 </div>
                 <div class="grid grid-cols-6 gap-3">
                     ${question.options.map(option => `
-                        <button onclick="handleAnswerSelect(${option})" class="p-5 border-3 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-center font-bold text-xl text-gray-700 hover:text-blue-700">
+                        <button data-answer="${option}" class="p-5 border-3 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-center font-bold text-xl text-gray-700 hover:text-blue-700 answer-btn">
                             ${option}
                         </button>
                     `).join('')}
@@ -293,7 +286,7 @@ function renderCurrentQuestion() {
         answerContainer.innerHTML = `
             <div class="space-y-4">
                 ${question.options.map(option => `
-                    <button onclick="handleAnswerSelect('${option}')" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all capitalize text-xl font-semibold text-gray-700 hover:text-blue-700">
+                    <button data-answer="${option}" class="w-full p-6 text-left border-3 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all capitalize text-xl font-semibold text-gray-700 hover:text-blue-700 answer-btn">
                         ${option}
                     </button>
                 `).join('')}
@@ -368,7 +361,6 @@ async function addPatientToQueue() {
     const newPatient = {
         esi: patientESI,
         status: 'Waiting',
-        waitTime: Math.round(Math.random() * 60 + 30),
         arrivalTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         chief_complaint: 'Self-assessed symptoms'
     };
@@ -411,4 +403,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('startAssessmentBtn').addEventListener('click', startAssessment);
     document.getElementById('backToQueueBtn').addEventListener('click', showQueueView);
     document.getElementById('addToQueueBtn').addEventListener('click', addPatientToQueue);
+    
+    // Event delegation for answer buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('answer-btn')) {
+            const answer = e.target.getAttribute('data-answer');
+            handleAnswerSelect(answer);
+        }
+    });
 });
