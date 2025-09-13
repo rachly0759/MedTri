@@ -46,82 +46,218 @@ let currentQuestion = 0;
 let showResult = false;
 let patientESI = null;
 
-// Assessment questions
+// New ESI Calculation Algorithm - Based on 4 Core Questions
+const calculateESI = (data) => {
+    let esiScore = 5; // Start with lowest priority (ESI 5)
+
+    // 1. PAIN LEVEL ASSESSMENT (Primary Factor)
+    const painLevel = parseInt(data.pain_level) || 0;
+    if (painLevel >= 9) {
+        esiScore = 1; // Severe pain = Immediate
+    } else if (painLevel >= 7) {
+        esiScore = 2; // High pain = Emergent
+    } else if (painLevel >= 5) {
+        esiScore = Math.min(esiScore, 3); // Moderate pain = Urgent
+    } else if (painLevel >= 3) {
+        esiScore = Math.min(esiScore, 4); // Mild pain = Less urgent
+    }
+
+    // 2. SYMPTOM ONSET ASSESSMENT (Acute vs Chronic)
+    if (data.symptom_onset === '0-4 hours') {
+        // Acute onset - needs immediate evaluation
+        if (painLevel >= 6) {
+            esiScore = Math.min(esiScore, 1); // Acute severe pain
+        } else if (painLevel >= 4) {
+            esiScore = Math.min(esiScore, 2); // Acute moderate pain
+        } else {
+            esiScore = Math.min(esiScore, 3); // Any acute symptom
+        }
+    } else if (data.symptom_onset === '5-12 hours') {
+        // Recent onset - still concerning
+        if (painLevel >= 7) {
+            esiScore = Math.min(esiScore, 2);
+        } else if (painLevel >= 5) {
+            esiScore = Math.min(esiScore, 3);
+        }
+    } else if (data.symptom_onset === '24 hours') {
+        // Day-old symptoms - less urgent unless severe
+        if (painLevel >= 8) {
+            esiScore = Math.min(esiScore, 2);
+        }
+    } else if (data.symptom_onset === '1+ days') {
+        // Chronic symptoms - lowest priority unless very severe
+        if (painLevel >= 9) {
+            esiScore = Math.min(esiScore, 2);
+        } else if (painLevel < 5) {
+            esiScore = 5; // Chronic low pain = lowest priority
+        }
+    }
+
+    // 3. SYMPTOM PROGRESSION ASSESSMENT
+    if (data.systom_progression === 'Worsened') {
+        // Worsening symptoms increase urgency
+        if (painLevel >= 6) {
+            esiScore = Math.min(esiScore, 1); // Worsening + significant pain
+        } else if (painLevel >= 4) {
+            esiScore = Math.min(esiScore, 2); // Worsening + moderate pain
+        } else {
+            esiScore = Math.min(esiScore, 3); // Any worsening condition
+        }
+    } else if (data.systom_progression === 'Getting better') {
+        // Improving symptoms can be less urgent
+        if (painLevel < 6 && data.symptom_onset !== '0-4 hours') {
+            esiScore = Math.max(esiScore, 4); // Lower priority if improving
+        }
+    } else if (data.systom_progression === 'No change') {
+        // Stable symptoms - no adjustment needed
+    }
+
+    // 4. CONDITION KNOWLEDGE ASSESSMENT
+    if (data.Condition_knowity === 'New condition') {
+        // New conditions need evaluation
+        if (painLevel >= 5) {
+            esiScore = Math.min(esiScore, 2); // New condition + moderate pain
+        } else if (painLevel >= 3) {
+            esiScore = Math.min(esiScore, 3); // New condition + mild pain
+        }
+    } else if (data.Condition_knowity === 'Known condition') {
+        // Known conditions may be less urgent if stable
+        if (data.systom_progression === 'No change' && painLevel < 7) {
+            esiScore = Math.max(esiScore, 4); // Known stable condition
+        }
+    }
+
+    // CRITICAL COMBINATION RULES
+    // Rule 1: Acute onset + worsening + high pain = Critical
+    if (data.symptom_onset === '0-4 hours' &&
+        data.systom_progression === 'Worsened' &&
+        painLevel >= 7) {
+        esiScore = 1;
+    }
+
+    // Rule 2: New condition + acute onset + worsening = High priority
+    if (data.Condition_knowity === 'New condition' &&
+        data.symptom_onset === '0-4 hours' &&
+        data.systom_progression === 'Worsened') {
+        esiScore = Math.min(esiScore, 2);
+    }
+
+    // Rule 3: Chronic improving condition = Lower priority
+    if (data.symptom_onset === '1+ days' &&
+        data.systom_progression === 'Getting better' &&
+        data.Condition_knowity === 'Known condition' &&
+        painLevel < 5) {
+        esiScore = 5;
+    }
+
+    return Math.max(1, Math.min(5, esiScore)); // Ensure ESI is between 1-5
+};
+
 const questions = [
     {
-        id: 'vitalsStable',
-        question: 'Are your vital signs stable? (No severe distress, normal breathing rate, normal pulse)',
-        type: 'yes_no'
+        id: 'patient_info',
+        questions: [
+            {
+                sub_id: 'name',
+                sub_q: 'Full Name',
+                type: 'string'
+            },
+            {
+                sub_id: 'dob',
+                sub_q: 'Date of Birth',
+                type: 'date'
+            },
+            {
+                sub_id: 'gender',
+                sub_q: 'Gender',
+                type: 'multiple',
+                options: ['Female', 'Male', 'Other', 'Prefer Not to Say']
+            },
+            {
+                sub_id: 'phone_no',
+                sub_q: 'Phone No.',
+                type: 'number'
+            },
+            {
+                sub_id: 'emergency_name',
+                sub_q: 'Emergency Contact Name',
+                type: 'string'
+            },
+            {
+                sub_id: 'emergency_phone',
+                sub_q: 'Emergency Contact Phone',
+                type: 'number'
+            },
+            {
+                sub_id: 'emergency_relation',
+                sub_q: 'Emergency Contact Relationship',
+                type: 'multiple',
+                options: ['Parent', 'Legal Guardian', 'Sibling']
+            }
+        ]
     },
-    {
-        id: 'painLevel',
-        question: 'On a scale of 0-10, what is your current pain level?',
-        type: 'scale',
-        options: Array.from({length: 11}, (_, i) => i)
-    },
-    {
-        id: 'chestPain',
-        question: 'Are you experiencing chest pain?',
-        type: 'yes_no'
-    },
-    {
-        id: 'breathingDifficulty',
-        question: 'Are you having difficulty breathing?',
-        type: 'multiple',
-        options: ['none', 'mild', 'moderate', 'severe']
-    },
-    {
-        id: 'consciousness',
-        question: 'How would you describe your current mental state?',
-        type: 'multiple',
-        options: ['alert', 'confused', 'drowsy', 'unresponsive']
-    },
-    {
-        id: 'bleeding',
-        question: 'Are you experiencing any bleeding?',
-        type: 'yes_no'
-    },
-    {
-        id: 'onset',
-        question: 'How quickly did your symptoms start?',
-        type: 'multiple',
-        options: ['sudden', 'gradual', 'chronic']
-    },
-    {
-        id: 'age',
-        question: 'What is your age?',
-        type: 'number'
-    }
+    [
+        {
+            id: 'esi_questions',
+            questions: [
+                {
+                    sub_id: 'symptom_onset',
+                    sub_q: 'When did the symptoms start?',
+                    type: 'multiple',
+                    options: ['0-4 hours', '5-12 hours', '24 hours', '1+ days'],
+                },
+                {
+                    sub_id: 'symptom_progression',
+                    sub_q: 'How have your symptoms progressed?',
+                    type: 'multiple',
+                    options: ['Getting better', 'Worsened', 'No change'],
+                },
+                {
+                    sub_id: 'pain_level',
+                    sub_q: 'On a scale of 0-10, what is your current pain level?',
+                    type: 'scale',
+                    options: Array.from({ length: 11 }, (_, i) => i),
+                },
+                {
+                    sub_id: 'condition_history',
+                    sub_q: 'Is this a new condition or has it ever happened before?',
+                    type: 'multiple',
+                    options: ['New condition', 'Known condition'],
+                },
+            ],
+        },
+        {
+            id: 'addit_patient_info',
+            questions: [
+                {
+                    sub_id: 'allergies',
+                    sub_q: 'Known allergies?',
+                    type: 'string',
+                },
+                {
+                    sub_id: 'chronic_conditions',
+                    sub_q: 'Known chronic conditions (e.g. diabetes, asthma, heart disease, epilepsy)?',
+                    type: 'string',
+                },
+            ],
+        },
+        {
+            id: 'accessibility_support',
+            questions: [
+                {
+                    sub_id: 'interpreter',
+                    sub_q: 'Do you need an interpreter?',
+                    type: 'yes_no',
+                },
+                {
+                    sub_id: 'mobility',
+                    sub_q: 'Do you need mobility support (wheelchair, etc.)?',
+                    type: 'yes_no',
+                },
+            ],
+        },
+    ]
 ];
-
-// ESI Calculation Logic
-function calculateESI(data) {
-    // ESI 1: Immediate life-threatening
-    if (data.vitalsStable === 'no' || data.consciousness === 'unresponsive' || 
-        (data.chestPain === 'yes' && data.onset === 'sudden')) {
-        return 1;
-    }
-    
-    // ESI 2: High risk, shouldn't wait
-    if (data.painLevel >= 8 || data.breathingDifficulty === 'severe' || 
-        (data.bleeding === 'yes' && data.onset === 'sudden')) {
-        return 2;
-    }
-    
-    // ESI 3: Moderate risk
-    if (data.painLevel >= 5 || data.breathingDifficulty === 'moderate' || 
-        data.chestPain === 'yes' || data.age >= 65) {
-        return 3;
-    }
-    
-    // ESI 4: Lower risk
-    if (data.painLevel >= 3 || data.bleeding === 'yes') {
-        return 4;
-    }
-    
-    // ESI 5: Lowest risk
-    return 5;
-}
 
 // Utility functions
 function getESIColor(esi) {
