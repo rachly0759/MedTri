@@ -97,6 +97,3 @@ pids
 *.pid
 *.seed
 *.pid.lock
-
-# Patient data - contains sensitive information
-patients.json
