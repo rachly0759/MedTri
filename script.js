@@ -243,6 +243,38 @@ const questions = [
 
 
 // Utility functions
+function formatTime24Hour(timeString) {
+    // Convert various time formats to 24-hour format (HH:MM)
+    if (!timeString) return '';
+    
+    // If already in 24-hour format (HH:MM), return as is
+    if (/^\d{1,2}:\d{2}$/.test(timeString)) {
+        return timeString;
+    }
+    
+    // If in 12-hour format (H:MM AM/PM), convert to 24-hour
+    if (timeString.includes('AM') || timeString.includes('PM')) {
+        const [time, period] = timeString.split(' ');
+        const [hours, minutes] = time.split(':');
+        let hour24 = parseInt(hours);
+        
+        if (period === 'AM' && hour24 === 12) {
+            hour24 = 0;
+        } else if (period === 'PM' && hour24 !== 12) {
+            hour24 += 12;
+        }
+        
+        return `${hour24.toString().padStart(2, '0')}:${minutes}`;
+    }
+    
+    // If it's a Date object or timestamp, format it
+    if (timeString instanceof Date) {
+        return timeString.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+    
+    return timeString;
+}
+
 function getESIColor(esi) {
     const colors = {
         1: 'esi-1',
@@ -328,7 +360,7 @@ function renderPatientQueue() {
                             </span>
                         </div>
                         <div class="text-sm text-gray-600">
-                            <span class="font-medium">${patient.chief_complaint}</span> • Arrived: ${patient.arrivalTime}
+                            <span class="font-medium">${patient.chief_complaint}</span> • Arrived: ${formatTime24Hour(patient.arrivalTime)}
                         </div>
                     </div>
                 </div>
@@ -701,7 +733,7 @@ async function addPatientToQueue() {
     const newPatient = {
         esi: patientESI,
         status: 'Waiting',
-        arrivalTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        arrivalTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
         chief_complaint: 'Self-assessed symptoms',
         // Include all collected patient data
         ...assessmentData
