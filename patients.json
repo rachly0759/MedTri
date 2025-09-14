@@ -118,37 +118,7 @@
       "chronic_conditions": "Asthma",
       "interpreter": "no",
       "mobility": "no"
-    },
-    {
-      "esi": 4,
-      "status": "Discharged",
-      "arrivalTime": "11:12",
-      "chief_complaint": "Self-assessed symptoms",
-      "vitalsStable": null,
-      "painLevel": null,
-      "chestPain": null,
-      "breathingDifficulty": null,
-      "consciousness": null,
-      "bleeding": null,
-      "onset": null,
-      "age": null,
-      "name": "John Doe",
-      "dob": "2007-06-14",
-      "gender": "Female",
-      "phone_no": "1294854393",
-      "emergency_name": "contact name",
-      "emergency_phone": "1290481309",
-      "emergency_relation": "Parent",
-      "symptom_onset": "0-4 hours",
-      "symptom_progression": "No change",
-      "pain_level": "2",
-      "condition_history": "Known condition",
-      "allergies": "none",
-      "chronic_conditions": "none",
-      "interpreter": "no",
-      "mobility": "no",
-      "id": "P007"
     }
   ],
-  "lastId": 7
+  "lastId": 6
 }
