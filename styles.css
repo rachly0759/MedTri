@@ -256,3 +256,14 @@ svg {
     display: inline-block;
     vertical-align: middle;
 }
+
+/* Header dropdown fixes */
+.bg-blue-600 {
+    min-height: fit-content !important;
+    max-height: fit-content !important;
+}
+
+#viewDropdown {
+    position: absolute !important;
+    z-index: 9999 !important;
+}

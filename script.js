@@ -256,10 +256,10 @@ function getESIColor(esi) {
 
 function getESILabel(esi) {
     const labels = {
-        1: 'Immediate',
-        2: 'Emergent',
+        1: 'Resuscitation',
+        2: 'Emergency',
         3: 'Urgent', 
-        4: 'Less Urgent',
+        4: 'Semi-Urgent',
         5: 'Non-Urgent'
     };
     return labels[esi] || 'Unknown';
@@ -323,7 +323,7 @@ function renderPatientQueue() {
                     <div>
                         <div class="flex items-center space-x-3 mb-1">
                             <span class="font-semibold text-lg">${patient.id}</span>
-                            <span class="px-3 py-1 rounded-full text-sm font-medium ${getESIColor(patient.esi)}">
+                            <span class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${getESIColor(patient.esi)}">
                                 ESI ${patient.esi} - ${getESILabel(patient.esi)}
                             </span>
                         </div>

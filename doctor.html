@@ -826,7 +826,7 @@
                             <div class="modal-field">
                                 <label class="modal-label">ESI Level</label>
                                 <select id="editESI" class="modal-select">
-                                    <option value="1">1 - Immediate</option>
+                                    <option value="1">1 - Resuscitation</option>
                                     <option value="2">2 - Emergency</option>
                                     <option value="3">3 - Urgent</option>
                                     <option value="4">4 - Semi-urgent</option>
@@ -1143,7 +1143,7 @@
                         <div class="patient-info">
                             <div class="patient-name">${patient.name || patient.id}</div>
                             <div class="patient-id-small">${patient.name ? `ID: ${patient.id}` : ''}</div>
-                            <div class="patient-esi-text">ESI Level ${patient.esi} - ${patient.esi === 1 ? 'Immediate' : patient.esi === 2 ? 'Emergency' : patient.esi === 3 ? 'Urgent' : patient.esi === 4 ? 'Semi-urgent' : 'Non-urgent'}</div>
+                            <div class="patient-esi-text">ESI Level ${patient.esi} - ${patient.esi === 1 ? 'Resuscitation' : patient.esi === 2 ? 'Emergency' : patient.esi === 3 ? 'Urgent' : patient.esi === 4 ? 'Semi-Urgent' : 'Non-Urgent'}</div>
                         </div>
                         <div class="patient-complaint">
                             <div class="field-label">Chief Complaint</div>
@@ -1503,11 +1503,11 @@
                 resultDiv.style.display = 'block';
                 
                 const descriptions = {
-                    1: 'Immediate - Life-threatening condition requiring immediate intervention',
-                    2: 'Emergent - High-risk condition that should not wait',
+                    1: 'Resuscitation - Life-threatening condition requiring immediate intervention',
+                    2: 'Emergency - High-risk condition that should not wait',
                     3: 'Urgent - Stable but requiring multiple resources (2+)',
-                    4: 'Less Urgent - Stable condition requiring one resource',
-                    5: 'Non-urgent - Stable condition requiring only examination'
+                    4: 'Semi-Urgent - Stable condition requiring one resource',
+                    5: 'Non-Urgent - Stable condition requiring only examination'
                 };
                 
                 resultCard.innerHTML = `
