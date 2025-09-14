@@ -110,6 +110,174 @@
             margin-bottom: 24px;
         }
 
+        .modal-subsection-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        /* Triage Assessment Styles */
+        .triage-section {
+            margin-bottom: 24px;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .triage-level-1 {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .triage-level-2 {
+            background-color: #fff7ed;
+            border-color: #fed7aa;
+        }
+
+        .triage-level-3-5 {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .triage-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .triage-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .triage-vitals-status {
+            background-color: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #d1d5db;
+        }
+
+        .triage-status-text {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .triage-criteria-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .triage-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .triage-checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .triage-checkbox {
+            margin-top: 2px;
+            width: 16px;
+            height: 16px;
+            accent-color: #dc2626;
+        }
+
+        .triage-checkbox-item span {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .triage-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .triage-radio-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: background-color 0.2s;
+        }
+
+        .triage-radio-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .triage-radio {
+            margin-top: 2px;
+            width: 16px;
+            height: 16px;
+            accent-color: #d97706;
+        }
+
+        .triage-radio-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .triage-radio-text strong {
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .triage-radio-text small {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .triage-result {
+            background-color: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .esi-result-card {
+            background-color: white;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #d1d5db;
+        }
+
+        .esi-level {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .esi-description {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .esi-level-1 { color: #dc2626; }
+        .esi-level-2 { color: #ea580c; }
+        .esi-level-3 { color: #d97706; }
+        .esi-level-4 { color: #16a34a; }
+        .esi-level-5 { color: #2563eb; }
+
         .modal-section-title {
             font-size: 18px;
             font-weight: 600;
@@ -240,6 +408,15 @@
             background: #1d4ed8;
         }
 
+        .modal-btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal-btn-danger:hover {
+            background: #b91c1c;
+        }
+
         /* Animation */
         .modal-overlay {
             animation: fadeIn 0.3s ease-out;
@@ -330,11 +507,17 @@
             flex-direction: column;
         }
 
-        .patient-id {
+        .patient-name {
             font-size: 18px;
             font-weight: 600;
             color: #1f2937;
             line-height: 1.2;
+        }
+
+        .patient-id-small {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 1px;
         }
 
         .patient-esi-text {
@@ -368,7 +551,14 @@
 
         .patient-status {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .delete-indicator {
+            font-size: 14px;
+            margin-top: 4px;
+            opacity: 0.7;
         }
 
         .status-badge {
@@ -406,8 +596,12 @@
                 font-size: 14px;
             }
             
-            .patient-id {
+            .patient-name {
                 font-size: 16px;
+            }
+            
+            .patient-id-small {
+                font-size: 11px;
             }
             
             .field-value {
@@ -553,6 +747,83 @@
                                 <input type="text" id="editPatientId" class="modal-input" readonly>
                             </div>
                             <div class="modal-field">
+                                <label class="modal-label">Full Name</label>
+                                <input type="text" id="editName" class="modal-input">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Date of Birth</label>
+                                <input type="date" id="editDob" class="modal-input">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Gender</label>
+                                <select id="editGender" class="modal-select">
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer Not to Say">Prefer Not to Say</option>
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Phone Number</label>
+                                <input type="tel" id="editPhoneNo" class="modal-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3 class="modal-section-title">Emergency Contact</h3>
+                        <div class="modal-form-group">
+                            <div class="modal-field">
+                                <label class="modal-label">Emergency Contact Name</label>
+                                <input type="text" id="editEmergencyName" class="modal-input">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Emergency Contact Phone</label>
+                                <input type="tel" id="editEmergencyPhone" class="modal-input">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Emergency Contact Relationship</label>
+                                <select id="editEmergencyRelation" class="modal-select">
+                                    <option value="Parent">Parent</option>
+                                    <option value="Legal Guardian">Legal Guardian</option>
+                                    <option value="Sibling">Sibling</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3 class="modal-section-title">Medical Information</h3>
+                        <div class="modal-form-group">
+                            <div class="modal-field">
+                                <label class="modal-label">Allergies</label>
+                                <input type="text" id="editAllergies" class="modal-input" placeholder="Enter allergies or 'None'">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Chronic Conditions</label>
+                                <input type="text" id="editChronicConditions" class="modal-input" placeholder="Enter chronic conditions or 'None'">
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Interpreter Needed</label>
+                                <select id="editInterpreter" class="modal-select">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label class="modal-label">Mobility Support Needed</label>
+                                <select id="editMobility" class="modal-select">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3 class="modal-section-title">Triage Information</h3>
+                        <div class="modal-form-group">
+                            <div class="modal-field">
                                 <label class="modal-label">ESI Level</label>
                                 <select id="editESI" class="modal-select">
                                     <option value="1">1 - Immediate</option>
@@ -571,12 +842,6 @@
                                     <option value="Discharged">Discharged</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-section">
-                        <h3 class="modal-section-title">Timing Information</h3>
-                        <div class="modal-form-group">
                             <div class="modal-field">
                                 <label class="modal-label">Arrival Time</label>
                                 <input type="text" id="editArrivalTime" class="modal-input">
@@ -597,10 +862,192 @@
                     </div>
                 </div>
 
+                <!-- ESI Triage Assessment -->
+                <div class="modal-section-full">
+                    <h3 class="modal-section-title">ESI Triage Assessment</h3>
+                    
+                    <!-- Patient Information for Triage -->
+                    <div class="modal-grid">
+                        <div class="modal-section">
+                            <h4 class="modal-subsection-title">Patient Demographics</h4>
+                            <div class="modal-form-group">
+                                <div class="modal-field">
+                                    <label class="modal-label">Patient Age</label>
+                                    <div class="flex space-x-2">
+                                        <input type="number" id="triageAge" class="modal-input flex-1" placeholder="Enter age">
+                                        <select id="triageAgeUnit" class="modal-select">
+                                            <option value="years">Years</option>
+                                            <option value="months">Months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-field">
+                                    <label class="modal-label">Patient Category</label>
+                                    <select id="triageCategory" class="modal-select">
+                                        <option value="adult">Adult (≥18 years)</option>
+                                        <option value="pediatric">Pediatric (<18 years)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section">
+                            <h4 class="modal-subsection-title">Vital Signs</h4>
+                            <div class="modal-form-group">
+                                <div class="modal-field">
+                                    <label class="modal-label">Heart Rate (bpm)</label>
+                                    <input type="number" id="triageHeartRate" class="modal-input">
+                                </div>
+                                <div class="modal-field">
+                                    <label class="modal-label">Respiratory Rate</label>
+                                    <input type="number" id="triageRespRate" class="modal-input">
+                                </div>
+                                <div class="modal-field">
+                                    <label class="modal-label">SpO₂ (%)</label>
+                                    <input type="number" id="triageSpO2" class="modal-input">
+                                </div>
+                                <div class="modal-field">
+                                    <label class="modal-label">Temperature (°C)</label>
+                                    <input type="number" step="0.1" id="triageTemperature" class="modal-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level 1 Assessment -->
+                    <div class="triage-section triage-level-1">
+                        <h4 class="triage-section-title">
+                            <span class="triage-icon">⚠️</span>
+                            Level 1 - Critical Conditions
+                        </h4>
+                        <div class="triage-vitals-status" id="level1VitalsStatus">
+                            <span class="triage-status-text">Complete vital signs to check status</span>
+                        </div>
+                        <div class="triage-criteria">
+                            <h5 class="triage-criteria-title">Clinical Criteria - Check all that apply:</h5>
+                            <div class="triage-checkboxes">
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="unresponsive">
+                                    <span>Unresponsive patient (nonverbal, not following commands, requires noxious stimulus)</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="cardiac_arrest">
+                                    <span>Cardiac/pulmonary arrest or appears imminent</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="respiratory_distress">
+                                    <span>Severe respiratory distress requiring immediate airway support</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="spo2_low">
+                                    <span>Ineffective gas exchange with SpO₂ < 90% (not patient's norm) with respiratory compromise</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="hypotension">
+                                    <span>Profound hypotension with signs of hypoperfusion</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level1-criteria" value="bradycardia_tachycardia">
+                                    <span>Severe bradycardia or tachycardia requiring immediate intervention</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level 2 Assessment -->
+                    <div class="triage-section triage-level-2">
+                        <h4 class="triage-section-title">
+                            <span class="triage-icon">❤️</span>
+                            Level 2 - High-Risk Conditions
+                        </h4>
+                        <div class="triage-vitals-status" id="level2VitalsStatus">
+                            <span class="triage-status-text">Complete temperature to check status</span>
+                        </div>
+                        <div class="triage-criteria">
+                            <h5 class="triage-criteria-title">Clinical Criteria - Check all that apply:</h5>
+                            <div class="triage-checkboxes">
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="chest_pain">
+                                    <span>Active chest pain suspicious for acute coronary syndrome</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="stroke">
+                                    <span>Signs of stroke without level 1 criteria</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="confusion">
+                                    <span>New onset confusion, lethargy, or disorientation</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="respiratory_distress">
+                                    <span>Increasing respiratory effort</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="abdominal_pain">
+                                    <span>Severe abdominal pain refractory to analgesia</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="suicidal">
+                                    <span>Actively suicidal or homicidal</span>
+                                </label>
+                                <label class="triage-checkbox-item">
+                                    <input type="checkbox" class="triage-checkbox level2-criteria" value="severe_pain">
+                                    <span>Systemic pain (renal colic, sickle cell crisis, cancer pain) - 7/10 or greater</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Assessment -->
+                    <div class="triage-section triage-level-3-5">
+                        <h4 class="triage-section-title">
+                            <span class="triage-icon">👥</span>
+                            Levels 3-5 - Resource Assessment
+                        </h4>
+                        <div class="triage-criteria">
+                            <h5 class="triage-criteria-title">How many ESI resources will this patient require?</h5>
+                            <div class="triage-radio-group">
+                                <label class="triage-radio-item">
+                                    <input type="radio" name="triageResources" value="0" class="triage-radio">
+                                    <span class="triage-radio-text">
+                                        <strong>0 resources → ESI Level 5</strong>
+                                        <small>History, physical exam, prescription only</small>
+                                    </span>
+                                </label>
+                                <label class="triage-radio-item">
+                                    <input type="radio" name="triageResources" value="1" class="triage-radio">
+                                    <span class="triage-radio-text">
+                                        <strong>1 resource → ESI Level 4</strong>
+                                        <small>Single test, procedure, or intervention</small>
+                                    </span>
+                                </label>
+                                <label class="triage-radio-item">
+                                    <input type="radio" name="triageResources" value="2" class="triage-radio">
+                                    <span class="triage-radio-text">
+                                        <strong>2+ resources → ESI Level 3</strong>
+                                        <small>Multiple tests, procedures, or interventions</small>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ESI Result -->
+                    <div class="triage-result" id="triageResult" style="display: none;">
+                        <h4 class="triage-section-title">ESI Assessment Result</h4>
+                        <div class="esi-result-card" id="esiResultCard">
+                            <!-- Result will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Action Buttons -->
                 <div class="modal-actions">
                     <button id="cancelEdit" class="modal-btn modal-btn-secondary">
                         Cancel
+                    </button>
+                    <button id="deletePatient" class="modal-btn modal-btn-danger" style="display: none;">
+                        Delete Patient
                     </button>
                     <button id="savePatient" class="modal-btn modal-btn-primary">
                         Save Changes
@@ -678,7 +1125,13 @@
                 const patientItem = document.createElement('div');
                 patientItem.className = 'patient-row';
                 patientItem.style.borderLeftColor = esiColor.borderColor;
-                patientItem.onclick = () => openPatientModal(patient);
+                patientItem.onclick = () => {
+                    // Always get the current patient data from the main patients array
+                    const currentPatientData = patients.find(p => p.id === patient.id);
+                    if (currentPatientData) {
+                        openPatientModal(currentPatientData);
+                    }
+                };
                 
                 patientItem.innerHTML = `
                     <div class="patient-content">
@@ -688,7 +1141,8 @@
                             </div>
                         </div>
                         <div class="patient-info">
-                            <div class="patient-id">${patient.id}</div>
+                            <div class="patient-name">${patient.name || patient.id}</div>
+                            <div class="patient-id-small">${patient.name ? `ID: ${patient.id}` : ''}</div>
                             <div class="patient-esi-text">ESI Level ${patient.esi} - ${patient.esi === 1 ? 'Immediate' : patient.esi === 2 ? 'Emergency' : patient.esi === 3 ? 'Urgent' : patient.esi === 4 ? 'Semi-urgent' : 'Non-urgent'}</div>
                         </div>
                         <div class="patient-complaint">
@@ -703,6 +1157,7 @@
                             <span class="status-badge" style="background-color: ${statusColor.backgroundColor}; color: ${statusColor.textColor}">
                                 ${patient.status}
                             </span>
+                            ${patient.status === 'Discharged' ? '<span class="delete-indicator" title="Can be deleted">🗑️</span>' : ''}
                         </div>
                         <div class="patient-arrow">
                             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -741,18 +1196,54 @@
 
         // Open patient modal
         function openPatientModal(patient) {
-            currentPatient = patient;
-            document.getElementById('modalPatientId').textContent = `Patient ${patient.id} - Details`;
+            // Always get the most current patient data from the main patients array
+            const currentPatientData = patients.find(p => p.id === patient.id);
+            if (!currentPatientData) {
+                console.error('Patient not found in current patients array');
+                return;
+            }
+            
+            currentPatient = { ...currentPatientData };
+            document.getElementById('modalPatientId').textContent = `${currentPatient.name || currentPatient.id} - Details`;
             
             // Fill basic information
-            document.getElementById('editPatientId').value = patient.id;
-            document.getElementById('editESI').value = patient.esi;
-            document.getElementById('editStatus').value = patient.status;
-            document.getElementById('editArrivalTime').value = patient.arrivalTime;
-            document.getElementById('editChiefComplaint').value = patient.chief_complaint || '';
+            document.getElementById('editPatientId').value = currentPatient.id;
+            document.getElementById('editName').value = currentPatient.name || '';
+            document.getElementById('editDob').value = currentPatient.dob || '';
+            document.getElementById('editGender').value = currentPatient.gender || 'Female';
+            document.getElementById('editPhoneNo').value = currentPatient.phone_no || '';
+            
+            // Fill emergency contact info
+            document.getElementById('editEmergencyName').value = currentPatient.emergency_name || '';
+            document.getElementById('editEmergencyPhone').value = currentPatient.emergency_phone || '';
+            document.getElementById('editEmergencyRelation').value = currentPatient.emergency_relation || 'Parent';
+            
+            // Fill medical information
+            document.getElementById('editAllergies').value = currentPatient.allergies || '';
+            document.getElementById('editChronicConditions').value = currentPatient.chronic_conditions || '';
+            document.getElementById('editInterpreter').value = currentPatient.interpreter || 'no';
+            document.getElementById('editMobility').value = currentPatient.mobility || 'no';
+            
+            // Fill triage information
+            document.getElementById('editESI').value = currentPatient.esi;
+            document.getElementById('editStatus').value = currentPatient.status;
+            document.getElementById('editArrivalTime').value = currentPatient.arrivalTime;
+            document.getElementById('editChiefComplaint').value = currentPatient.chief_complaint || '';
+            
+            // Clear and fill triage assessment data
+            clearTriageAssessment();
+            fillTriageAssessment(currentPatient);
             
             // Fill assessment responses
-            renderAssessmentResponses(patient);
+            renderAssessmentResponses(currentPatient);
+            
+            // Show/hide delete button based on status
+            const deleteBtn = document.getElementById('deletePatient');
+            if (currentPatient.status === 'Discharged') {
+                deleteBtn.style.display = 'inline-block';
+            } else {
+                deleteBtn.style.display = 'none';
+            }
             
             // Show modal
             document.getElementById('patientModal').style.display = 'flex';
@@ -762,16 +1253,12 @@
         function renderAssessmentResponses(patient) {
             const responsesContainer = document.getElementById('assessmentResponses');
             
-            // Default assessment questions (you can expand this based on your actual assessment data)
+            // Updated assessment questions based on the new assessment data
             const assessmentQuestions = [
-                { key: 'vitalsStable', question: 'Are vital signs stable?', type: 'yesno' },
-                { key: 'painLevel', question: 'Pain level (1-10)?', type: 'number' },
-                { key: 'chestPain', question: 'Chest pain present?', type: 'yesno' },
-                { key: 'breathingDifficulty', question: 'Breathing difficulty?', type: 'yesno' },
-                { key: 'consciousness', question: 'Level of consciousness?', type: 'text' },
-                { key: 'bleeding', question: 'Active bleeding?', type: 'yesno' },
-                { key: 'onset', question: 'Symptom onset?', type: 'text' },
-                { key: 'age', question: 'Patient age?', type: 'number' }
+                { key: 'symptom_onset', question: 'When did the symptoms start?', type: 'text' },
+                { key: 'symptom_progression', question: 'How have your symptoms progressed?', type: 'text' },
+                { key: 'pain_level', question: 'Pain level (0-10)?', type: 'number' },
+                { key: 'condition_history', question: 'Is this a new or known condition?', type: 'text' }
             ];
 
             responsesContainer.innerHTML = '';
@@ -815,10 +1302,275 @@
             }
         }
 
+        // Clear triage assessment inputs
+        function clearTriageAssessment() {
+            // Clear vital signs
+            document.getElementById('triageHeartRate').value = '';
+            document.getElementById('triageRespRate').value = '';
+            document.getElementById('triageSpO2').value = '';
+            document.getElementById('triageTemperature').value = '';
+            
+            // Clear age and category
+            document.getElementById('triageAge').value = '';
+            document.getElementById('triageAgeUnit').value = 'years';
+            document.getElementById('triageCategory').value = 'adult';
+            
+            // Clear all checkboxes
+            document.querySelectorAll('.level1-criteria').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.querySelectorAll('.level2-criteria').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Clear resource selection
+            document.querySelectorAll('input[name="triageResources"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Hide result
+            document.getElementById('triageResult').style.display = 'none';
+        }
+
+        // Fill triage assessment with existing data
+        function fillTriageAssessment(patient) {
+            // Calculate age from DOB if available
+            if (patient.dob) {
+                const dob = new Date(patient.dob);
+                const today = new Date();
+                let ageInYears = today.getFullYear() - dob.getFullYear();
+                const monthDiff = today.getMonth() - dob.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    ageInYears--;
+                }
+                
+                document.getElementById('triageAge').value = ageInYears;
+                document.getElementById('triageAgeUnit').value = 'years';
+                document.getElementById('triageCategory').value = ageInYears >= 18 ? 'adult' : 'pediatric';
+            }
+            
+            // Fill vital signs if available
+            if (patient.triage_vitals) {
+                if (patient.triage_vitals.heartRate) {
+                    document.getElementById('triageHeartRate').value = patient.triage_vitals.heartRate;
+                }
+                if (patient.triage_vitals.respiratoryRate) {
+                    document.getElementById('triageRespRate').value = patient.triage_vitals.respiratoryRate;
+                }
+                if (patient.triage_vitals.spO2) {
+                    document.getElementById('triageSpO2').value = patient.triage_vitals.spO2;
+                }
+                if (patient.triage_vitals.temperature) {
+                    document.getElementById('triageTemperature').value = patient.triage_vitals.temperature;
+                }
+            }
+            
+            // Fill criteria if available
+            if (patient.triage_level1_criteria) {
+                patient.triage_level1_criteria.forEach(criterion => {
+                    const checkbox = document.querySelector(`input[value="${criterion}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            if (patient.triage_level2_criteria) {
+                patient.triage_level2_criteria.forEach(criterion => {
+                    const checkbox = document.querySelector(`input[value="${criterion}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            if (patient.triage_resources !== undefined) {
+                const radio = document.querySelector(`input[name="triageResources"][value="${patient.triage_resources}"]`);
+                if (radio) radio.checked = true;
+            }
+            
+            // Update triage assessment
+            updateTriageAssessment();
+        }
+
+        // Triage assessment functions
+        function getAgeInYears() {
+            const age = parseFloat(document.getElementById('triageAge').value);
+            const unit = document.getElementById('triageAgeUnit').value;
+            if (isNaN(age)) return 0;
+            return unit === 'months' ? age / 12 : age;
+        }
+
+        function checkVitalSigns() {
+            const heartRate = parseInt(document.getElementById('triageHeartRate').value);
+            const respRate = parseInt(document.getElementById('triageRespRate').value);
+            const spO2 = parseInt(document.getElementById('triageSpO2').value);
+            
+            if (isNaN(heartRate) || isNaN(respRate) || isNaN(spO2)) return false;
+            
+            const age = getAgeInYears();
+            
+            if (age >= 18) {
+                // Adult criteria: HR > 100, RR > 20, SpO₂ < 92%
+                return heartRate > 100 || respRate > 20 || spO2 < 92;
+            } else {
+                // Pediatric criteria
+                const pediatricThresholds = [
+                    { ageRange: [0, 1/12], hrThreshold: 190, rrThreshold: 60 },
+                    { ageRange: [1/12, 1], hrThreshold: 180, rrThreshold: 55 },
+                    { ageRange: [1, 3], hrThreshold: 140, rrThreshold: 40 },
+                    { ageRange: [3, 5], hrThreshold: 120, rrThreshold: 35 },
+                    { ageRange: [5, 12], hrThreshold: 120, rrThreshold: 30 },
+                    { ageRange: [12, 18], hrThreshold: 100, rrThreshold: 20 }
+                ];
+
+                for (const threshold of pediatricThresholds) {
+                    if (age >= threshold.ageRange[0] && age < threshold.ageRange[1]) {
+                        return heartRate > threshold.hrThreshold || respRate > threshold.rrThreshold;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function checkTemperatureCriteria() {
+            const temp = parseFloat(document.getElementById('triageTemperature').value);
+            const age = getAgeInYears();
+            const ageInMonths = age * 12;
+            const ageInDays = ageInMonths * 30;
+            
+            if (isNaN(temp)) return false;
+
+            if (temp < 36) return true;
+            if (ageInDays < 90 && temp > 38) return true;
+            if (ageInMonths > 3 && temp > 38.5) return true;
+            
+            return false;
+        }
+
+        function calculateESILevel() {
+            // Level 1: Critical vitals or critical symptoms
+            if (checkVitalSigns()) {
+                return 1;
+            }
+            
+            const level1Criteria = Array.from(document.querySelectorAll('.level1-criteria:checked')).map(cb => cb.value);
+            if (level1Criteria.length > 0) {
+                return 1;
+            }
+            
+            // Level 2: Temperature criteria or high-risk symptoms
+            if (checkTemperatureCriteria()) {
+                return 2;
+            }
+            
+            const level2Criteria = Array.from(document.querySelectorAll('.level2-criteria:checked')).map(cb => cb.value);
+            if (level2Criteria.length > 0) {
+                return 2;
+            }
+            
+            // Levels 3-5: Based on resources
+            const resourceRadio = document.querySelector('input[name="triageResources"]:checked');
+            if (!resourceRadio) return null;
+            
+            const resourceCount = parseInt(resourceRadio.value);
+            if (resourceCount >= 2) return 3;
+            if (resourceCount === 1) return 4;
+            return 5;
+        }
+
+        function updateTriageAssessment() {
+            const esiLevel = calculateESILevel();
+            
+            // Update vital signs status
+            const level1Status = document.getElementById('level1VitalsStatus');
+            const level2Status = document.getElementById('level2VitalsStatus');
+            
+            if (checkVitalSigns()) {
+                level1Status.innerHTML = '<span class="triage-status-text" style="color: #dc2626;">⚠️ CRITICAL VITALS DETECTED → ESI LEVEL 1</span>';
+            } else {
+                level1Status.innerHTML = '<span class="triage-status-text" style="color: #16a34a;">✓ Vitals within normal range</span>';
+            }
+            
+            if (checkTemperatureCriteria()) {
+                level2Status.innerHTML = '<span class="triage-status-text" style="color: #ea580c;">⚠️ FEVER CRITERIA MET → ESI LEVEL 2</span>';
+            } else {
+                level2Status.innerHTML = '<span class="triage-status-text" style="color: #16a34a;">✓ Temperature criteria not met</span>';
+            }
+            
+            // Update ESI result
+            const resultDiv = document.getElementById('triageResult');
+            const resultCard = document.getElementById('esiResultCard');
+            
+            if (esiLevel) {
+                resultDiv.style.display = 'block';
+                
+                const descriptions = {
+                    1: 'Immediate - Life-threatening condition requiring immediate intervention',
+                    2: 'Emergent - High-risk condition that should not wait',
+                    3: 'Urgent - Stable but requiring multiple resources (2+)',
+                    4: 'Less Urgent - Stable condition requiring one resource',
+                    5: 'Non-urgent - Stable condition requiring only examination'
+                };
+                
+                resultCard.innerHTML = `
+                    <div class="esi-level esi-level-${esiLevel}">ESI ${esiLevel}</div>
+                    <div class="esi-description">${descriptions[esiLevel]}</div>
+                `;
+                
+                // Update the main ESI field
+                document.getElementById('editESI').value = esiLevel;
+            } else {
+                resultDiv.style.display = 'none';
+            }
+        }
+
+        // Delete patient
+        async function deletePatient() {
+            if (!currentPatient) return;
+            
+            // Confirm deletion
+            const confirmDelete = confirm(`Are you sure you want to delete ${currentPatient.name || currentPatient.id}? This action cannot be undone.`);
+            if (!confirmDelete) return;
+            
+            try {
+                // Remove patient from the patients array
+                const index = patients.findIndex(p => p.id === currentPatient.id);
+                if (index !== -1) {
+                    patients.splice(index, 1);
+                }
+                
+                // Send updated patients array to server
+                const response = await fetch('/api/patients', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        patients: patients,
+                        lastId: lastId
+                    })
+                });
+                
+                if (response.ok) {
+                    updateQueueStats();
+                    renderPatientQueue();
+                    closeModal();
+                    alert('Patient deleted successfully!');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+                    alert('Failed to delete patient: ' + (errorData.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting patient:', error);
+                alert('Error deleting patient');
+            }
+        }
+
         // Close modal
         function closeModal() {
             document.getElementById('patientModal').style.display = 'none';
             currentPatient = null;
+            // Clear triage assessment for next patient
+            clearTriageAssessment();
         }
 
         // Save patient changes
@@ -826,26 +1578,124 @@
             if (!currentPatient) return;
 
             try {
+                // Basic validation
+                const name = document.getElementById('editName').value.trim();
+                const phoneNo = document.getElementById('editPhoneNo').value.trim();
+                const emergencyName = document.getElementById('editEmergencyName').value.trim();
+                const emergencyPhone = document.getElementById('editEmergencyPhone').value.trim();
+
+                if (!name) {
+                    alert('Please enter the patient\'s name');
+                    return;
+                }
+
+                if (!phoneNo) {
+                    alert('Please enter the patient\'s phone number');
+                    return;
+                }
+
+                if (!emergencyName) {
+                    alert('Please enter the emergency contact name');
+                    return;
+                }
+
+                if (!emergencyPhone) {
+                    alert('Please enter the emergency contact phone number');
+                    return;
+                }
+
+                // Update current patient with all form values
+                currentPatient.name = name;
+                currentPatient.dob = document.getElementById('editDob').value;
+                currentPatient.gender = document.getElementById('editGender').value;
+                currentPatient.phone_no = phoneNo;
+                
+                // Emergency contact info
+                currentPatient.emergency_name = emergencyName;
+                currentPatient.emergency_phone = emergencyPhone;
+                currentPatient.emergency_relation = document.getElementById('editEmergencyRelation').value;
+                
+                // Medical information
+                currentPatient.allergies = document.getElementById('editAllergies').value;
+                currentPatient.chronic_conditions = document.getElementById('editChronicConditions').value;
+                currentPatient.interpreter = document.getElementById('editInterpreter').value;
+                currentPatient.mobility = document.getElementById('editMobility').value;
+                
+                // Triage information
+                currentPatient.esi = parseInt(document.getElementById('editESI').value);
+                currentPatient.status = document.getElementById('editStatus').value;
+                currentPatient.arrivalTime = document.getElementById('editArrivalTime').value;
+                currentPatient.chief_complaint = document.getElementById('editChiefComplaint').value;
+                
+                // Triage assessment data - only save non-empty values
+                const heartRate = document.getElementById('triageHeartRate').value;
+                const respRate = document.getElementById('triageRespRate').value;
+                const spO2 = document.getElementById('triageSpO2').value;
+                const temperature = document.getElementById('triageTemperature').value;
+                
+                // Only create triage_vitals object if at least one vital sign is entered
+                if (heartRate || respRate || spO2 || temperature) {
+                    currentPatient.triage_vitals = {
+                        heartRate: heartRate || '',
+                        respiratoryRate: respRate || '',
+                        spO2: spO2 || '',
+                        temperature: temperature || ''
+                    };
+                } else {
+                    // Remove triage_vitals if no vital signs are entered
+                    delete currentPatient.triage_vitals;
+                }
+                
+                // Only save criteria if any are selected
+                const level1Criteria = Array.from(document.querySelectorAll('.level1-criteria:checked')).map(cb => cb.value);
+                const level2Criteria = Array.from(document.querySelectorAll('.level2-criteria:checked')).map(cb => cb.value);
+                
+                if (level1Criteria.length > 0) {
+                    currentPatient.triage_level1_criteria = level1Criteria;
+                } else {
+                    delete currentPatient.triage_level1_criteria;
+                }
+                
+                if (level2Criteria.length > 0) {
+                    currentPatient.triage_level2_criteria = level2Criteria;
+                } else {
+                    delete currentPatient.triage_level2_criteria;
+                }
+                
+                const resourceRadio = document.querySelector('input[name="triageResources"]:checked');
+                if (resourceRadio) {
+                    currentPatient.triage_resources = parseInt(resourceRadio.value);
+                } else {
+                    delete currentPatient.triage_resources;
+                }
+
+                // Update the current patient in the patients array
+                const index = patients.findIndex(p => p.id === currentPatient.id);
+                if (index !== -1) {
+                    patients[index] = { ...currentPatient };
+                }
+
+                // Send the complete patients array and lastId to the server
                 const response = await fetch('/api/patients', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(currentPatient)
+                    body: JSON.stringify({
+                        patients: patients,
+                        lastId: lastId
+                    })
                 });
 
                 if (response.ok) {
-                    // Update local patients array
-                    const index = patients.findIndex(p => p.id === currentPatient.id);
-                    if (index !== -1) {
-                        patients[index] = currentPatient;
-                        updateQueueStats();
-                        renderPatientQueue();
-                    }
+                    updateQueueStats();
+                    renderPatientQueue();
                     closeModal();
                     alert('Patient information updated successfully!');
                 } else {
-                    alert('Failed to update patient information');
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+                    alert('Failed to update patient information: ' + (errorData.error || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error updating patient:', error);
@@ -861,6 +1711,47 @@
             document.getElementById('closeModal').onclick = closeModal;
             document.getElementById('cancelEdit').onclick = closeModal;
             document.getElementById('savePatient').onclick = savePatient;
+            document.getElementById('deletePatient').onclick = deletePatient;
+            
+            // Triage assessment event listeners
+            const triageInputs = [
+                'triageAge', 'triageAgeUnit', 'triageCategory',
+                'triageHeartRate', 'triageRespRate', 'triageSpO2', 'triageTemperature'
+            ];
+            
+            triageInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updateTriageAssessment);
+                    element.addEventListener('change', updateTriageAssessment);
+                }
+            });
+            
+            // Triage criteria checkboxes
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('level1-criteria') || 
+                    e.target.classList.contains('level2-criteria') ||
+                    e.target.name === 'triageResources') {
+                    updateTriageAssessment();
+                }
+                
+                // Auto-calculate age from DOB
+                if (e.target.id === 'editDob' && e.target.value) {
+                    const dob = new Date(e.target.value);
+                    const today = new Date();
+                    let ageInYears = today.getFullYear() - dob.getFullYear();
+                    const monthDiff = today.getMonth() - dob.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                        ageInYears--;
+                    }
+                    
+                    document.getElementById('triageAge').value = ageInYears;
+                    document.getElementById('triageAgeUnit').value = 'years';
+                    document.getElementById('triageCategory').value = ageInYears >= 18 ? 'adult' : 'pediatric';
+                    updateTriageAssessment();
+                }
+            });
             
             // Close modal when clicking outside
             document.getElementById('patientModal').onclick = function(e) {
