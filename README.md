@@ -27,7 +27,11 @@ If you want to use the server version with JSON file storage:
    ```bash
    export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && npm start
    ```
-4. **Access the Application**:
+   OR
+   ```bash
+   npm start
+   ```
+5. **Access the Application**:
    Open your browser and navigate to `http://localhost:3000`
 
 **Alternative Single Command:**
